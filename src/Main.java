@@ -7,7 +7,7 @@ public class Main
         instance = new Infested();       
     }
     
-    public void getInstance()
+    public Infested getInstance()
     {
         return instance;
     }

@@ -3,14 +3,14 @@ import java.awt.Rectangle;
 import javax.swing.ImageIcon;
 
 
-public abstract class Entity{
-    
+public abstract class Entity
+{
     ImageIcon image;
     int x, y, width, height;
     
-    public Entity(String path, int xc, int yc)
+    public Entity(String texture, int xc, int yc)
     {
-        image = new ImageIcon(path);
+        image = new ImageIcon(texture);
         x = xc;
         y = yc;
         init();
