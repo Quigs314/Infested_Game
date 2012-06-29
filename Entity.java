@@ -1,25 +1,24 @@
-
 import java.awt.Rectangle;
 import javax.swing.ImageIcon;
 
 
-public abstract class Entity{
+public abstract class Entity
+{
+    private int x, y, width, height;
+    private ImageIcon image;
     
-    ImageIcon image;
-    int x, y, width, height;
-    
-    public Entity(String path, int xc, int yc)
+    public Entity(String path, int x, int y)
     {
         image = new ImageIcon(path);
-        x = xc;
-        y = yc;
+        this.x = x;
+        this.y = y;
         init();
     }
     
-    public boolean isTouching(int xc, int yc, int w, int h)
+    public boolean isTouching(int x, int y, int width, int height)
     {
-        return(x + width >= xc && x < xc + w 
-                && y + height > yc && y < yc + h);
+        return(this.x + this.width >= x && this.x < x + width 
+                && this.y + this.height > yc && this.y < y + height);
     }
     
     public boolean isTouching(Rectangle rect)
