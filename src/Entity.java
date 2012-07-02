@@ -18,7 +18,7 @@ public abstract class Entity
     public boolean isTouching(int x, int y, int width, int height)
     {
         return(this.x + this.width >= x && this.x < x + width 
-                && this.y + this.height > yc && this.y < y + height);
+                && this.y + this.height > y && this.y < y + height);
     }
     
     public boolean isTouching(Rectangle rect)

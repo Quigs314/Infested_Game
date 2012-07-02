@@ -7,10 +7,10 @@ public class Main
         instance = new Infested();       
     }
     
-    public void getInstance()
+    /*public void getInstance()
     {
         return instance;
-    }
+    }*/
 
     public static void main(String[] args)
     {
