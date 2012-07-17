@@ -57,7 +57,7 @@ public class Infested extends JFrame
             case INTRO:
                 try
                 {
-                    g.drawImage(new ImageIcon(loadImage("Logo")).getImage(), 100, 20, this);
+                    g.drawImage(new ImageIcon(loadImage("Logo")).getImage(), 100, 50, 400, 200, this);
                 }
                 catch (FileNotFoundException e)
                 {
