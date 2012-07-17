@@ -1,8 +1,8 @@
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
+import java.io.FileNotFoundException;
+import javax.swing.*;
 
 public class Infested extends JFrame
 {
@@ -14,7 +14,9 @@ public class Infested extends JFrame
     public State state = State.INTRO;
     
     private Image i;
-    
+
+    private Thread thread;
+
     public Infested()
     {
         super("Infested");
@@ -25,11 +27,19 @@ public class Infested extends JFrame
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
-        
-        while (true)
+
+        thread = new Thread()
         {
-            repaint();
-        }
+            @Override
+            public void run()
+            {
+                while (true)
+                {
+                }
+            }
+        };
+
+        thread.start();
     }
     
     public void paint(Graphics g)
@@ -45,16 +55,36 @@ public class Infested extends JFrame
         switch(state)
         {
             case INTRO:
-                g.drawImage(new ImageIcon(loadImage("Logo")).getImage(), 100, 20, this);
+                try
+                {
+                    g.drawImage(new ImageIcon(loadImage("Logo")).getImage(), 100, 20, this);
+                }
+                catch (FileNotFoundException e)
+                {
+                    catchException(e);
+                }
                 break;
         }
     }
-    
-//  I should probably make this throw an exception
-    public String loadImage(String i)
+
+    public String loadImage(String i) throws FileNotFoundException
     {
-        if(new File(imagePath + i + ".png").exists())
-            System.err.println("Image does not exist");
-        return (imagePath + i + ".png");
+        String toReturn = imagePath + "/" + i + ".png";
+
+        if(!new File(toReturn).exists())
+            throw new FileNotFoundException(toReturn + " does not exist");
+
+        return (toReturn);
+    }
+
+    public void catchException(Exception e)
+    {
+        JOptionPane.showMessageDialog(this, "An error has occured and Infested needs to close. Sorry!\n\n" +
+                "--------DEBUG INFO--------\nThe Exception stack trace is in the console.", "Error", JOptionPane.ERROR_MESSAGE);
+
+        System.out.println("INFESTED: ** An Exception occured. The stack trace is below. **");
+        e.printStackTrace(System.err);
+
+        System.exit(1);
     }
 }
