@@ -4,6 +4,8 @@ import java.awt.Image;
 import java.awt.event.KeyEvent;
 import static java.awt.event.KeyEvent.*;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import javax.swing.ImageIcon;
@@ -21,8 +23,9 @@ public class Infested extends JFrame implements KeyListener
     
     private Image i;
 
-    private Thread thread;
-
+    CustomButton playButton;
+    CustomButton quitButton;
+    
     public boolean isDDown;
     public boolean isADown;
     public boolean isSpaceDown;
@@ -39,6 +42,26 @@ public class Infested extends JFrame implements KeyListener
         setFocusable(true);
         requestFocus();
         addKeyListener(this);
+        addMouseListener(new MouseAdapter()
+        {
+            @Override
+            public void mouseClicked(MouseEvent e)
+            {
+                if(e.getX() <= playButton.x + playButton.width && e.getX() >= playButton.x &&
+                        e.getY() <= playButton.y + playButton.height && e.getY() >= playButton.y)
+                    state = State.GAME;
+                else if(e.getX() <= quitButton.x + quitButton.width && e.getX() >= quitButton.x &&
+                        e.getY() <= quitButton.y + quitButton.height && e.getY() >= quitButton.y)
+                {
+                    if(JOptionPane.showConfirmDialog(null, "Are you sure you wish to quit playing?", "Quit?"
+                            , JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+                    {
+                        JOptionPane.showMessageDialog(null, "Goodbye!");
+                        System.exit(0);
+                    }
+                }
+            }
+        });
         setVisible(true);
         
         while (true)
@@ -83,6 +106,12 @@ public class Infested extends JFrame implements KeyListener
                     g.setColor(Color.GREEN);
                     g.fillRect(0, 0, getWidth(), getHeight());
                     g.drawImage(new ImageIcon(loadImage("Logo")).getImage(), 100, 50, 400, 200, this);
+                    playButton = new CustomButton("Play Game", this);
+                    playButton.setBounds(50, 250, 200, 100);
+                    playButton.draw(g);
+                    quitButton = new CustomButton("Quit Game", this);
+                    quitButton.setBounds(350, 250, 200, 100);
+                    quitButton.draw(g);
                 }
                 catch (FileNotFoundException e)
                 {
