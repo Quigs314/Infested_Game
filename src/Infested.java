@@ -1,10 +1,16 @@
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.KeyEvent;
+import static java.awt.event.KeyEvent.*;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.FileNotFoundException;
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
-public class Infested extends JFrame
+public class Infested extends JFrame implements KeyListener
 {
     public static final int WIDTH = 600;
     public static final int HEIGHT = 500;
@@ -17,29 +23,46 @@ public class Infested extends JFrame
 
     private Thread thread;
 
+    public boolean isDDown;
+    public boolean isADown;
+    public boolean isSpaceDown;
+    
     public Infested()
     {
         super("Infested");
         
-        imagePath = "res/images";
+        imagePath = "res/images/";
         
         setSize(WIDTH, HEIGHT);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setFocusable(true);
+        requestFocus();
+        addKeyListener(this);
         setVisible(true);
-
-        thread = new Thread()
+        
+        while (true)
         {
-            @Override
-            public void run()
+            switch(state)
             {
-                while (true)
-                {
-                }
+                case INTRO:
+                    if(isSpaceDown)
+                    {
+                        state = State.GAME;
+                        System.out.println("Switching to game state");
+                    }
+                    break;
+                case GAME:
+                    
+                    break;
             }
-        };
-
-        thread.start();
+            //This makes the game run at 50 fps
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException ex) {
+                catchException(ex);
+            }
+        }
     }
     
     public void paint(Graphics g)
@@ -57,10 +80,13 @@ public class Infested extends JFrame
             case INTRO:
                 try
                 {
+                    g.setColor(Color.GREEN);
+                    g.fillRect(0, 0, getWidth(), getHeight());
                     g.drawImage(new ImageIcon(loadImage("Logo")).getImage(), 100, 50, 400, 200, this);
                 }
                 catch (FileNotFoundException e)
                 {
+                    setVisible(false);
                     catchException(e);
                 }
                 break;
@@ -69,7 +95,7 @@ public class Infested extends JFrame
 
     public String loadImage(String i) throws FileNotFoundException
     {
-        String toReturn = imagePath + "/" + i + ".png";
+        String toReturn = imagePath + i + ".png";
 
         if(!new File(toReturn).exists())
             throw new FileNotFoundException(toReturn + " does not exist");
@@ -79,12 +105,52 @@ public class Infested extends JFrame
 
     public void catchException(Exception e)
     {
+        StackTraceElement[] test = e.getStackTrace();
         JOptionPane.showMessageDialog(this, "An error has occured and Infested needs to close. Sorry!\n\n" +
-                "--------DEBUG INFO--------\nThe Exception stack trace is in the console.", "Error", JOptionPane.ERROR_MESSAGE);
+                "--------DEBUG INFO--------\n" + e.getMessage() + "\n" + test[0].toString() + "\n" + test[1].toString()
+                + "\n\n" + "Please email our company or contact us in some other way with the debug info." 
+                + "\n" + "Sorry for the inconvenience, we will get back to you as soon as possible!"
+                , "Error", JOptionPane.ERROR_MESSAGE);
 
         System.out.println("INFESTED: ** An Exception occured. The stack trace is below. **");
         e.printStackTrace(System.err);
 
         System.exit(1);
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e){}
+
+    @Override
+    public void keyPressed(KeyEvent e)
+    {
+        switch(e.getKeyCode())
+        {
+            case VK_D:
+                isDDown = true;
+                break;
+            case VK_A:
+                isADown = true;
+                break;
+            case VK_SPACE:
+                isSpaceDown = true;
+                break;
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        switch(e.getKeyCode())
+        {
+            case VK_D:
+                isDDown = false;
+                break;
+            case VK_A:
+                isADown = false;
+                break;
+            case VK_SPACE:
+                isSpaceDown = false;
+                break;
+        }
     }
 }
