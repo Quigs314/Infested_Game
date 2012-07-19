@@ -87,12 +87,16 @@ public class Infested extends JFrame implements KeyListener
                     {
                         player.x += 4;
                         player.isForwards = true;
+                        player.isWalking = true;
                     }
                     else if(isADown)
                     {
                         player.x -= 4;
                         player.isForwards = false;
+                        player.isWalking = true;
                     }
+                    else
+                        player.isWalking = false;
                     break;
             }
             //This makes the game run at 50 fps

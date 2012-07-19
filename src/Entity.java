@@ -21,8 +21,8 @@ public class Entity implements ActionListener{
         forwardImages = new ArrayList<>();
         backwardsImages = new ArrayList<>();
         
-        timer = new  Timer(5, this);
-        
+        timer = new  Timer(100, this);
+        timer.start();
     }
     
     public boolean isTouching(Entity e)
@@ -35,7 +35,7 @@ public class Entity implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == timer)
         {
-            if(cycle - 1 < forwardImages.size())
+            if(cycle + 1 < forwardImages.size())
                 cycle++;
             else
                 cycle = 0;
