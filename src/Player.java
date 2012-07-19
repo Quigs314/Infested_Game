@@ -33,12 +33,12 @@ public class Player extends Entity{
     
     public void loadPlayerImages() throws IOException
     {
-        forwardImages.add(new ImageIcon(infested.loadImage("player/WalkingRight1")));
-        forwardImages.add(new ImageIcon(infested.loadImage("player/WalkingRight2")));
-        forwardImages.add(new ImageIcon(infested.loadImage("player/WalkingRight3")));
-        backwardsImages.add(new ImageIcon(infested.loadImage("player/WalkingLeft1")));
-        backwardsImages.add(new ImageIcon(infested.loadImage("player/WalkingLeft2")));
-        backwardsImages.add(new ImageIcon(infested.loadImage("player/WalkingLeft3")));
+        forwardImages.add(new ImageIcon(Infested.loadImage("player/WalkingRight1")));
+        forwardImages.add(new ImageIcon(Infested.loadImage("player/WalkingRight2")));
+        forwardImages.add(new ImageIcon(Infested.loadImage("player/WalkingRight3")));
+        backwardsImages.add(new ImageIcon(Infested.loadImage("player/WalkingLeft1")));
+        backwardsImages.add(new ImageIcon(Infested.loadImage("player/WalkingLeft2")));
+        backwardsImages.add(new ImageIcon(Infested.loadImage("player/WalkingLeft3")));
     }
     
     public Image getImage()

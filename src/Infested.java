@@ -17,7 +17,7 @@ public class Infested extends JFrame implements KeyListener
     public static final int WIDTH = 600;
     public static final int HEIGHT = 500;
     
-    public String imagePath;
+    public static String imagePath;
     
     public State state = State.INTRO;
     
@@ -86,12 +86,14 @@ public class Infested extends JFrame implements KeyListener
                     if(isDDown)
                     {
                         player.x += 4;
+                        background.distance += 4;
                         player.isForwards = true;
                         player.isWalking = true;
                     }
                     else if(isADown)
                     {
                         player.x -= 4;
+                        background.distance -= 4;
                         player.isForwards = false;
                         player.isWalking = true;
                     }
@@ -99,6 +101,8 @@ public class Infested extends JFrame implements KeyListener
                         player.isWalking = false;
                     break;
             }
+            
+            background.update();
             //This makes the game run at 50 fps
             try {
                 Thread.sleep(20);
@@ -145,7 +149,7 @@ public class Infested extends JFrame implements KeyListener
         }
     }
     
-    public String loadImage(String i) throws FileNotFoundException
+    public static String loadImage(String i) throws FileNotFoundException
     {
         String toReturn = imagePath + i + ".png";
 
