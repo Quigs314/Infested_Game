@@ -20,12 +20,25 @@ public class Player extends Entity{
         } catch (IOException ex) {
             infested.catchException(ex);
         }
+        
+        x = Infested.WIDTH / 2;
+        y = Infested.HEIGHT / 2;
+        width = 100;
+        height = 200;
+        
+        isForwards = true;
+        isWalking = false;
+        isJumping = false;
     }
     
     public void loadPlayerImages() throws IOException
     {
         forwardImages.add(new ImageIcon(infested.loadImage("player/WalkingRight1")));
+        forwardImages.add(new ImageIcon(infested.loadImage("player/WalkingRight2")));
+        forwardImages.add(new ImageIcon(infested.loadImage("player/WalkingRight3")));
         backwardsImages.add(new ImageIcon(infested.loadImage("player/WalkingLeft1")));
+        backwardsImages.add(new ImageIcon(infested.loadImage("player/WalkingLeft2")));
+        backwardsImages.add(new ImageIcon(infested.loadImage("player/WalkingLeft3")));
     }
     
     public Image getImage()
@@ -33,9 +46,19 @@ public class Player extends Entity{
         ImageIcon toReturn;
         
         if(isForwards)
-            toReturn = forwardImages.get(cycle);
+        {
+            if (isWalking)
+                toReturn = forwardImages.get(cycle);
+            else
+                toReturn = forwardImages.get(0);
+        }
         else
-            toReturn = backwardsImages.get(cycle);
+        {
+            if (isWalking)
+                toReturn = backwardsImages.get(cycle);
+            else
+                    toReturn = backwardsImages.get(0);
+        }
         
         return toReturn.getImage();
     }
