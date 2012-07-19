@@ -26,6 +26,10 @@ public class Infested extends JFrame implements KeyListener
     CustomButton playButton;
     CustomButton quitButton;
     
+    Background background;
+    
+    Player player;
+    
     public boolean isDDown;
     public boolean isADown;
     public boolean isSpaceDown;
@@ -35,6 +39,9 @@ public class Infested extends JFrame implements KeyListener
         super("Infested");
         
         imagePath = "res/images/";
+        
+        player = new Player(this);
+        background = new Background(player);
         
         setSize(WIDTH, HEIGHT);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -49,7 +56,11 @@ public class Infested extends JFrame implements KeyListener
             {
                 if(e.getX() <= playButton.x + playButton.width && e.getX() >= playButton.x &&
                         e.getY() <= playButton.y + playButton.height && e.getY() >= playButton.y)
+                {
                     state = State.GAME;
+                    add(background);
+                    
+                }
                 else if(e.getX() <= quitButton.x + quitButton.width && e.getX() >= quitButton.x &&
                         e.getY() <= quitButton.y + quitButton.height && e.getY() >= quitButton.y)
                 {
@@ -69,14 +80,19 @@ public class Infested extends JFrame implements KeyListener
             switch(state)
             {
                 case INTRO:
-                    if(isSpaceDown)
-                    {
-                        state = State.GAME;
-                        System.out.println("Switching to game state");
-                    }
+                    
                     break;
                 case GAME:
-                    
+                    if(isDDown)
+                    {
+                        player.x += 4;
+                        player.isForwards = true;
+                    }
+                    else if(isADown)
+                    {
+                        player.x -= 4;
+                        player.isForwards = false;
+                    }
                     break;
             }
             //This makes the game run at 50 fps
@@ -119,9 +135,12 @@ public class Infested extends JFrame implements KeyListener
                     catchException(e);
                 }
                 break;
+            case GAME:
+                background.render(g);
+                break;
         }
     }
-
+    
     public String loadImage(String i) throws FileNotFoundException
     {
         String toReturn = imagePath + i + ".png";

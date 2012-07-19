@@ -13,7 +13,6 @@ public class CustomButton{
     int x, y, width, height;
     String label;
     Infested infested;
-    ActionListener action;
     
     public CustomButton(String label, Infested i)
     {
@@ -69,10 +68,5 @@ public class CustomButton{
         } catch (FileNotFoundException ex) {
             infested.catchException(ex);
         }
-    }
-    
-    public void setActionListener(ActionListener a)
-    {
-        action = a;
     }
 }

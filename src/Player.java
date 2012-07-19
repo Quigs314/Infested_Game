@@ -20,6 +20,15 @@ public class Player extends Entity{
         } catch (IOException ex) {
             infested.catchException(ex);
         }
+        
+        x = Infested.WIDTH / 2;
+        y = Infested.HEIGHT / 2;
+        width = 100;
+        height = 200;
+        
+        isForwards = true;
+        isWalking = false;
+        isJumping = false;
     }
     
     public void loadPlayerImages() throws IOException
