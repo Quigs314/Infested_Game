@@ -54,21 +54,24 @@ public class Infested extends JFrame implements KeyListener
             @Override
             public void mouseClicked(MouseEvent e)
             {
-                if(e.getX() <= playButton.x + playButton.width && e.getX() >= playButton.x &&
-                        e.getY() <= playButton.y + playButton.height && e.getY() >= playButton.y)
+                if(state == State.INTRO)
                 {
-                    state = State.GAME;
-                    add(background);
-                    
-                }
-                else if(e.getX() <= quitButton.x + quitButton.width && e.getX() >= quitButton.x &&
-                        e.getY() <= quitButton.y + quitButton.height && e.getY() >= quitButton.y)
-                {
-                    if(JOptionPane.showConfirmDialog(null, "Are you sure you wish to quit playing?", "Quit?"
-                            , JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+                    if(e.getX() <= playButton.x + playButton.width && e.getX() >= playButton.x &&
+                            e.getY() <= playButton.y + playButton.height && e.getY() >= playButton.y)
                     {
-                        JOptionPane.showMessageDialog(null, "Goodbye!");
-                        System.exit(0);
+                        state = State.GAME;
+                        add(background);
+
+                    }
+                    else if(e.getX() <= quitButton.x + quitButton.width && e.getX() >= quitButton.x &&
+                            e.getY() <= quitButton.y + quitButton.height && e.getY() >= quitButton.y)
+                    {
+                        if(JOptionPane.showConfirmDialog(null, "Are you sure you wish to quit playing?", "Quit?"
+                                , JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+                        {
+                            JOptionPane.showMessageDialog(null, "Goodbye!");
+                            System.exit(0);
+                        }
                     }
                 }
             }
@@ -85,14 +88,14 @@ public class Infested extends JFrame implements KeyListener
                 case GAME:
                     if(isDDown)
                     {
-                        player.x += 4;
+                        player.setX(player.getX() + 4);
                         background.distance += 4;
                         player.isForwards = true;
                         player.isWalking = true;
                     }
                     else if(isADown)
                     {
-                        player.x -= 4;
+                        player.setX(player.getX() - 4);
                         background.distance -= 4;
                         player.isForwards = false;
                         player.isWalking = true;
@@ -103,10 +106,13 @@ public class Infested extends JFrame implements KeyListener
             }
             
             background.update();
-            //This makes the game run at 50 fps
-            try {
-                Thread.sleep(20);
-            } catch (InterruptedException ex) {
+
+            try
+            {
+                Thread.sleep(20); //50 FPS
+            }
+            catch (InterruptedException ex)
+            {
                 catchException(ex);
             }
         }
@@ -129,7 +135,7 @@ public class Infested extends JFrame implements KeyListener
                 {
                     g.setColor(Color.GREEN);
                     g.fillRect(0, 0, getWidth(), getHeight());
-                    g.drawImage(new ImageIcon(loadImage("Logo")).getImage(), 100, 50, 400, 200, this);
+                    g.drawImage(getImage("Logo"), 100, 50, 400, 200, this);
                     playButton = new CustomButton("Play Game", this);
                     playButton.setBounds(50, 250, 200, 100);
                     playButton.draw(g);
@@ -149,24 +155,25 @@ public class Infested extends JFrame implements KeyListener
         }
     }
     
-    public static String loadImage(String i) throws FileNotFoundException
+    public static Image getImage(String i) throws FileNotFoundException
     {
         String toReturn = imagePath + i + ".png";
 
         if(!new File(toReturn).exists())
             throw new FileNotFoundException(toReturn + " does not exist");
 
-        return (toReturn);
+        return new ImageIcon(toReturn).getImage();
     }
 
-    public void catchException(Exception e)
+    public static void catchException(Exception e)
     {
         StackTraceElement[] test = e.getStackTrace();
-        JOptionPane.showMessageDialog(this, "An error has occured and Infested needs to close. Sorry!\n\n" +
-                "--------DEBUG INFO--------\n" + e.getMessage() + "\n" + test[0].toString() + "\n" + test[1].toString()
-                + "\n\n" + "Please email our company or contact us in some other way with the debug info." 
-                + "\n" + "Sorry for the inconvenience, we will get back to you as soon as possible!"
-                , "Error", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null,
+                "An error has occurred and Infested needs to close. Sorry!\n\n--------DEBUG INFO--------\n"
+                + e.getMessage() + "\n" + test[0].toString() + "\n" + test[1].toString()
+                + "\nCurrently we do not have a business email, " +
+                "but this game isn't even released to the public anyway, so it doesn't matter.",
+                "Error", JOptionPane.ERROR_MESSAGE);
 
         System.out.println("INFESTED: ** An Exception occured. The stack trace is below. **");
         e.printStackTrace(System.err);
@@ -180,6 +187,7 @@ public class Infested extends JFrame implements KeyListener
     @Override
     public void keyPressed(KeyEvent e)
     {
+
         switch(e.getKeyCode())
         {
             case VK_D:
@@ -195,7 +203,8 @@ public class Infested extends JFrame implements KeyListener
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
+    public void keyReleased(KeyEvent e)
+    {
         switch(e.getKeyCode())
         {
             case VK_D:

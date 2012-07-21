@@ -1,10 +1,9 @@
-
 import java.awt.Image;
 import java.io.IOException;
 import javax.swing.ImageIcon;
 
-
-public class Player extends Entity{
+public class Player extends Entity
+{
     
     Infested infested;
     
@@ -15,16 +14,20 @@ public class Player extends Entity{
     public Player(Infested i)
     {
         infested = i;
-        try {
+
+        try
+        {
             loadPlayerImages();
-        } catch (IOException ex) {
+        }
+        catch (IOException ex)
+        {
             infested.catchException(ex);
         }
         
-        x = Infested.WIDTH / 2;
-        y = Infested.HEIGHT / 2;
-        width = 100;
-        height = 200;
+        setY(Infested.WIDTH / 2);
+        setY(Infested.HEIGHT / 2);
+        setWidth(100);
+        setHeight(200);
         
         isForwards = true;
         isWalking = false;
@@ -33,12 +36,12 @@ public class Player extends Entity{
     
     public void loadPlayerImages() throws IOException
     {
-        forwardImages.add(new ImageIcon(Infested.loadImage("player/WalkingRight1")));
-        forwardImages.add(new ImageIcon(Infested.loadImage("player/WalkingRight2")));
-        forwardImages.add(new ImageIcon(Infested.loadImage("player/WalkingRight3")));
-        backwardsImages.add(new ImageIcon(Infested.loadImage("player/WalkingLeft1")));
-        backwardsImages.add(new ImageIcon(Infested.loadImage("player/WalkingLeft2")));
-        backwardsImages.add(new ImageIcon(Infested.loadImage("player/WalkingLeft3")));
+        forwardImages.add(new ImageIcon(Infested.getImage("player/WalkingRight1")));
+        forwardImages.add(new ImageIcon(Infested.getImage("player/WalkingRight2")));
+        forwardImages.add(new ImageIcon(Infested.getImage("player/WalkingRight3")));
+        backwardsImages.add(new ImageIcon(Infested.getImage("player/WalkingLeft1")));
+        backwardsImages.add(new ImageIcon(Infested.getImage("player/WalkingLeft2")));
+        backwardsImages.add(new ImageIcon(Infested.getImage("player/WalkingLeft3")));
     }
     
     public Image getImage()
@@ -48,14 +51,14 @@ public class Player extends Entity{
         if(isForwards)
         {
             if (isWalking)
-                toReturn = forwardImages.get(cycle);
+                toReturn = forwardImages.get(getAnimCycle());
             else
                 toReturn = forwardImages.get(0);
         }
         else
         {
             if (isWalking)
-                toReturn = backwardsImages.get(cycle);
+                toReturn = backwardsImages.get(getAnimCycle());
             else
                     toReturn = backwardsImages.get(0);
         }
