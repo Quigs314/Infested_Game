@@ -22,7 +22,7 @@ public class Entity implements ActionListener
         forwardImages = new ArrayList<>();
         backwardsImages = new ArrayList<>();
         
-        animTimer = new  Timer(250, this);
+        animTimer = new  Timer(150, this);
         animTimer.start();
     }
 

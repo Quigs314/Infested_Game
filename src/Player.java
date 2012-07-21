@@ -4,13 +4,14 @@ import javax.swing.ImageIcon;
 
 public class Player extends Entity
 {
-    
-    Infested infested;
+    public static final int SPEED = 6;
+
+    private Infested infested;
     
     boolean isWalking;
     boolean isForwards;
     boolean isJumping;
-    
+
     public Player(Infested i)
     {
         infested = i;

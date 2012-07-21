@@ -88,15 +88,15 @@ public class Infested extends JFrame implements KeyListener
                 case GAME:
                     if(isDDown)
                     {
-                        player.setX(player.getX() + 4);
-                        background.distance += 4;
+                        player.setX(player.getX() + Player.SPEED);
+                        background.distance += Player.SPEED;
                         player.isForwards = true;
                         player.isWalking = true;
                     }
                     else if(isADown)
                     {
-                        player.setX(player.getX() - 4);
-                        background.distance -= 4;
+                        player.setX(player.getX() - Player.SPEED);
+                        background.distance -= Player.SPEED;
                         player.isForwards = false;
                         player.isWalking = true;
                     }
@@ -167,10 +167,11 @@ public class Infested extends JFrame implements KeyListener
 
     public static void catchException(Exception e)
     {
-        StackTraceElement[] test = e.getStackTrace();
+        StackTraceElement[] stackTrace = e.getStackTrace();
+
         JOptionPane.showMessageDialog(null,
                 "An error has occurred and Infested needs to close. Sorry!\n\n--------DEBUG INFO--------\n"
-                + e.getMessage() + "\n" + test[0].toString() + "\n" + test[1].toString()
+                + e.getMessage() + "\n" + stackTrace[0].toString() + "\n" + stackTrace[1].toString()
                 + "\nCurrently we do not have a business email, " +
                 "but this game isn't even released to the public anyway, so it doesn't matter.",
                 "Error", JOptionPane.ERROR_MESSAGE);
