@@ -9,7 +9,6 @@ import javax.swing.ImageIcon;
 
 public class Entity implements ActionListener
 {
-    //consider making them ArrayLists of Images instead of ImageIcons
     public ArrayList<Image> forwardImages;
     public ArrayList<Image> backwardImages;
 
