@@ -1,10 +1,9 @@
 import java.awt.Image;
 import java.io.IOException;
-import javax.swing.ImageIcon;
 
 public class Player extends Entity
 {
-    public static final int SPEED = 6;
+    public static final int SPEED = 6, RANGE = 100;
 
     private Infested infested;
     
@@ -18,36 +17,26 @@ public class Player extends Entity
 
         try
         {
-            loadPlayerImages();
+            loadAnimationFrames(getClass());
         }
         catch (IOException ex)
         {
             infested.catchException(ex);
         }
-        
-        setY(Infested.WIDTH / 2);
-        setY(Infested.HEIGHT / 2);
+
         setWidth(100);
         setHeight(200);
+        setX(Infested.WIDTH / 2 - getWidth() / 2);
+        setY(Infested.HEIGHT / 2);
         
         isForwards = true;
         isWalking = false;
         isJumping = false;
     }
     
-    public void loadPlayerImages() throws IOException
-    {
-        forwardImages.add(new ImageIcon(Infested.getImage("player/WalkingRight1")));
-        forwardImages.add(new ImageIcon(Infested.getImage("player/WalkingRight2")));
-        forwardImages.add(new ImageIcon(Infested.getImage("player/WalkingRight3")));
-        backwardsImages.add(new ImageIcon(Infested.getImage("player/WalkingLeft1")));
-        backwardsImages.add(new ImageIcon(Infested.getImage("player/WalkingLeft2")));
-        backwardsImages.add(new ImageIcon(Infested.getImage("player/WalkingLeft3")));
-    }
-    
     public Image getImage()
     {
-        ImageIcon toReturn;
+        Image toReturn;
         
         if(isForwards)
         {
@@ -59,11 +48,16 @@ public class Player extends Entity
         else
         {
             if (isWalking)
-                toReturn = backwardsImages.get(getAnimCycle());
+                toReturn = backwardImages.get(getAnimCycle());
             else
-                    toReturn = backwardsImages.get(0);
+                    toReturn = backwardImages.get(0);
         }
-        
-        return toReturn.getImage();
+
+        return toReturn;
+    }
+
+    public int getDefaultX()
+    {
+        return Infested.WIDTH / 2 - getWidth() / 2;
     }
 }

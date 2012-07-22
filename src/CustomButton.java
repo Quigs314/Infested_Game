@@ -1,11 +1,9 @@
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.io.FileNotFoundException;
-import javax.swing.ImageIcon;
 
-
-public class CustomButton{
+public class CustomButton
+{
     
     int x, y, width, height;
     String label;
@@ -59,7 +57,7 @@ public class CustomButton{
     public void draw(Graphics g)
     {
         try {
-            g.drawImage(new ImageIcon(infested.getImage("Button1")).getImage(),x, y, width, height, null);
+            g.drawImage(infested.getImage("Button1.png"),x, y, width, height, null);
             g.setColor(Color.WHITE);
             g.drawString(label, x + (width / 2 - 50), y + (height / 2 + 5));
         } catch (FileNotFoundException ex) {

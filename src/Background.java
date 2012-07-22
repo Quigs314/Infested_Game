@@ -1,12 +1,11 @@
 import java.awt.Graphics;
+import java.io.File;
 import java.io.FileNotFoundException;
 import javax.swing.JPanel;
 
 public class Background extends JPanel
 {
-    Player player;
-    
-    public int distance;
+    private Player player;
     
     public Background(Player p)
     {
@@ -18,15 +17,13 @@ public class Background extends JPanel
     
     public void update()
     {
-        setLocation(-distance, 0);
-        invalidate();
     }
     
     public void render(Graphics g)
     {
         try
         {
-            g.drawImage(Infested.getImage("backgrounds/suburbs"), 0, 0, this);
+            g.drawImage(Infested.getImage("backgrounds/suburbs.png"), getLocation().x, getLocation().y, this);
         }
         catch (FileNotFoundException ex)
         {
