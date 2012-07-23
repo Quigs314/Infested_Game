@@ -32,6 +32,7 @@ public class Infested extends JFrame implements KeyListener
     
     public boolean isDDown;
     public boolean isADown;
+    public boolean isWDown;
     public boolean isSpaceDown;
     
     public Infested()
@@ -54,21 +55,24 @@ public class Infested extends JFrame implements KeyListener
             @Override
             public void mouseClicked(MouseEvent e)
             {
-                if(e.getX() <= playButton.x + playButton.width && e.getX() >= playButton.x &&
-                        e.getY() <= playButton.y + playButton.height && e.getY() >= playButton.y)
+                if(state == State.INTRO)
                 {
-                    state = State.GAME;
-                    add(background);
-                    
-                }
-                else if(e.getX() <= quitButton.x + quitButton.width && e.getX() >= quitButton.x &&
-                        e.getY() <= quitButton.y + quitButton.height && e.getY() >= quitButton.y)
-                {
-                    if(JOptionPane.showConfirmDialog(null, "Are you sure you wish to quit playing?", "Quit?"
-                            , JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+                    if(e.getX() <= playButton.x + playButton.width && e.getX() >= playButton.x &&
+                            e.getY() <= playButton.y + playButton.height && e.getY() >= playButton.y)
                     {
-                        JOptionPane.showMessageDialog(null, "Goodbye!");
-                        System.exit(0);
+                        state = State.GAME;
+                        add(background);
+
+                    }
+                    else if(e.getX() <= quitButton.x + quitButton.width && e.getX() >= quitButton.x &&
+                            e.getY() <= quitButton.y + quitButton.height && e.getY() >= quitButton.y)
+                    {
+                        if(JOptionPane.showConfirmDialog(null, "Are you sure you wish to quit playing?", "Quit?"
+                                , JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+                        {
+                            JOptionPane.showMessageDialog(null, "Goodbye!");
+                            System.exit(0);
+                        }
                     }
                 }
             }
@@ -85,28 +89,34 @@ public class Infested extends JFrame implements KeyListener
                 case GAME:
                     if(isDDown)
                     {
-                        player.x += 4;
-                        background.distance += 4;
+                        player.setX(player.getX() + player.speed);
+                        background.distance += player.speed;
                         player.isForwards = true;
                         player.isWalking = true;
                     }
-                    else if(isADown)
+                    else if(isADown && background.distance > 0)
                     {
-                        player.x -= 4;
-                        background.distance -= 4;
+                        player.setX(player.getX() - player.speed);
+                        background.distance -= player.speed;
                         player.isForwards = false;
                         player.isWalking = true;
                     }
                     else
                         player.isWalking = false;
+                    
+                    if(isWDown && !player.isJumping)
+                        player.fallSpeed = -10;
+                    
+                    player.fall();
                     break;
             }
-            
-            background.update();
-            //This makes the game run at 50 fps
-            try {
-                Thread.sleep(20);
-            } catch (InterruptedException ex) {
+
+            try
+            {
+                Thread.sleep(20); //50 FPS
+            }
+            catch (InterruptedException ex)
+            {
                 catchException(ex);
             }
         }
@@ -129,7 +139,7 @@ public class Infested extends JFrame implements KeyListener
                 {
                     g.setColor(Color.GREEN);
                     g.fillRect(0, 0, getWidth(), getHeight());
-                    g.drawImage(new ImageIcon(loadImage("Logo")).getImage(), 100, 50, 400, 200, this);
+                    g.drawImage(getImage("Logo"), 100, 50, 400, 200, this);
                     playButton = new CustomButton("Play Game", this);
                     playButton.setBounds(50, 250, 200, 100);
                     playButton.draw(g);
@@ -149,24 +159,26 @@ public class Infested extends JFrame implements KeyListener
         }
     }
     
-    public static String loadImage(String i) throws FileNotFoundException
+    public static Image getImage(String i) throws FileNotFoundException
     {
         String toReturn = imagePath + i + ".png";
 
         if(!new File(toReturn).exists())
             throw new FileNotFoundException(toReturn + " does not exist");
 
-        return (toReturn);
+        return new ImageIcon(toReturn).getImage();
     }
 
-    public void catchException(Exception e)
+    public static void catchException(Exception e)
     {
-        StackTraceElement[] test = e.getStackTrace();
-        JOptionPane.showMessageDialog(this, "An error has occured and Infested needs to close. Sorry!\n\n" +
-                "--------DEBUG INFO--------\n" + e.getMessage() + "\n" + test[0].toString() + "\n" + test[1].toString()
-                + "\n\n" + "Please email our company or contact us in some other way with the debug info." 
-                + "\n" + "Sorry for the inconvenience, we will get back to you as soon as possible!"
-                , "Error", JOptionPane.ERROR_MESSAGE);
+        StackTraceElement[] stackTrace = e.getStackTrace();
+
+        JOptionPane.showMessageDialog(null,
+                "An error has occurred and Infested needs to close. Sorry!\n\n--------DEBUG INFO--------\n"
+                + e.getMessage() + "\n" + stackTrace[0].toString() + "\n" + stackTrace[1].toString()
+                + "\nCurrently we do not have a business email, " +
+                "but this game isn't even released to the public anyway, so it doesn't matter.",
+                "Error", JOptionPane.ERROR_MESSAGE);
 
         System.out.println("INFESTED: ** An Exception occured. The stack trace is below. **");
         e.printStackTrace(System.err);
@@ -180,6 +192,7 @@ public class Infested extends JFrame implements KeyListener
     @Override
     public void keyPressed(KeyEvent e)
     {
+
         switch(e.getKeyCode())
         {
             case VK_D:
@@ -188,6 +201,9 @@ public class Infested extends JFrame implements KeyListener
             case VK_A:
                 isADown = true;
                 break;
+            case VK_W:
+                isWDown = true;
+                break;
             case VK_SPACE:
                 isSpaceDown = true;
                 break;
@@ -195,7 +211,8 @@ public class Infested extends JFrame implements KeyListener
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
+    public void keyReleased(KeyEvent e)
+    {
         switch(e.getKeyCode())
         {
             case VK_D:
@@ -203,6 +220,9 @@ public class Infested extends JFrame implements KeyListener
                 break;
             case VK_A:
                 isADown = false;
+                break;
+            case VK_W:
+                isWDown = false;
                 break;
             case VK_SPACE:
                 isSpaceDown = false;
