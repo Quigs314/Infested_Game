@@ -3,7 +3,10 @@ import java.io.IOException;
 
 public class Player extends Entity
 {
-    public static final int SPEED = 6, RANGE = 100;
+    public static final RANGE = 100;
+
+    public int speed = 6;
+    public int fallSpeed = 0;
 
     private Infested infested;
     
@@ -14,6 +17,9 @@ public class Player extends Entity
     public Player(Infested i)
     {
         infested = i;
+
+        speed = 6;
+        fallSpeed = 0;  
 
         try
         {
@@ -33,7 +39,23 @@ public class Player extends Entity
         isWalking = false;
         isJumping = false;
     }
-    
+   
+    public void fall()
+    {
+        setY(getY() + (int)fallSpeed);
+        //TODO: Replace statement with method for determining if player is on a platform
+        if(getY() > Infested.WIDTH / 2 - 50)
+        {
+            fallSpeed = 0;
+            isJumping = false;
+        }
+        else
+        {
+            fallSpeed += 0.5;
+            isJumping = true;
+        }
+    }
+ 
     public Image getImage()
     {
         Image toReturn;
