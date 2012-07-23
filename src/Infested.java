@@ -86,9 +86,12 @@ public class Infested extends JFrame implements KeyListener
                     if(isDDown)
                     {
                         if(player.getX() < player.getDefaultX() + Player.RANGE)
-                            player.setX(player.getX() + Player.SPEED);
+                            player.setX(player.getX() - player.speed);
                         else
-                            background.setLocation(background.getLocation().x - Player.SPEED, background.getLocation().y);
+                        {
+                            player.setX(player.getX() - player.speed);
+                            background.distance -= player.speed;
+                        }
 
                         player.isForwards = true;
                         player.isWalking = true;
@@ -96,19 +99,27 @@ public class Infested extends JFrame implements KeyListener
                     else if(isADown)
                     {
                         if(player.getX() > player.getDefaultX() - Player.RANGE)
-                            player.setX(player.getX() - Player.SPEED);
+                            player.setX(player.getX() - player.speed);
                         else
-                            background.setLocation(background.getLocation().x + Player.SPEED, background.getLocation().y);
+                        {
+                            player.setX(player.getX() - player.speed);
+                            background.distance -= player.speed;
+                        }
 
                         player.isForwards = false;
                         player.isWalking = true;
                     }
                     else
                         player.isWalking = false;
+
+                    if(isWDown && !player.isJumping)
+                        player.fallSpeed = -10;
+                    
+                    player.fall();
+
                     break;
             }
             
-            background.update();
 
             try
             {
