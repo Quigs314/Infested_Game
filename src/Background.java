@@ -16,14 +16,15 @@ public class Background extends JPanel
         player = p;
     }
     
-    public void render(Graphics g)
+    public void render(Graphics g, Infested i)
     {
         try
         {
-            g.drawImage(Infested.getImage("backgrounds/suburbs"), -distance, 0, this);
+            g.drawImage(Infested.getImage("backgrounds/suburbs.png"), -distance, 0, this);
         }
         catch (FileNotFoundException ex)
         {
+            i.setVisible(false);
             Infested.catchException(ex);
         }
 

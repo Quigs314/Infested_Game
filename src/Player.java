@@ -3,7 +3,7 @@ import java.io.IOException;
 
 public class Player extends Entity
 {
-    public static final RANGE = 100;
+    public static final int RANGE = 50;
 
     public int speed = 6;
     public int fallSpeed = 0;

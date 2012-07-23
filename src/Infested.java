@@ -17,7 +17,7 @@ public class Infested extends JFrame implements KeyListener
     public static final int WIDTH = 600;
     public static final int HEIGHT = 500;
 
-    private boolean isDDown, isADown, isSpaceDown;
+    private boolean isDDown, isADown, isSpaceDown, isWDown;
 
     public static String imagePath;
 
@@ -85,12 +85,12 @@ public class Infested extends JFrame implements KeyListener
                 case GAME:
                     if(isDDown)
                     {
-                        if(player.getX() < player.getDefaultX() + Player.RANGE)
-                            player.setX(player.getX() - player.speed);
+                        if(player.getX() < player.getDefaultX() + Player.RANGE + background.distance)
+                            player.setX(player.getX() + player.speed);
                         else
                         {
-                            player.setX(player.getX() - player.speed);
-                            background.distance -= player.speed;
+                            player.setX(player.getX() + player.speed);
+                            background.distance += player.speed;
                         }
 
                         player.isForwards = true;
@@ -98,7 +98,7 @@ public class Infested extends JFrame implements KeyListener
                     }
                     else if(isADown)
                     {
-                        if(player.getX() > player.getDefaultX() - Player.RANGE)
+                        if(player.getX() > player.getDefaultX() - Player.RANGE + background.distance)
                             player.setX(player.getX() - player.speed);
                         else
                         {
@@ -165,7 +165,7 @@ public class Infested extends JFrame implements KeyListener
                 }
                 break;
             case GAME:
-                background.render(g);
+                background.render(g, this);
                 break;
             case PAUSE:
                 break;
@@ -189,7 +189,7 @@ public class Infested extends JFrame implements KeyListener
     }
 
     public static void catchException(Exception e)
-    {
+    {   
         StackTraceElement[] stackTrace = e.getStackTrace();
 
         JOptionPane.showMessageDialog(null,
@@ -256,6 +256,9 @@ public class Infested extends JFrame implements KeyListener
             case VK_ESCAPE:
                 state = State.PAUSE;
                 break;
+            case VK_W:
+                isWDown = true;
+                break;
         }
     }
 
@@ -272,6 +275,9 @@ public class Infested extends JFrame implements KeyListener
                 break;
             case VK_SPACE:
                 isSpaceDown = false;
+                break;
+            case VK_W:
+                isWDown = true;
                 break;
         }
     }
