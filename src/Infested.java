@@ -25,7 +25,7 @@ public class Infested extends JFrame implements KeyListener
 
     private Image doubleBufferImage;
 
-    private CustomButton playButton, quitButton;
+    private CustomButton playButton, quitButton, menuButton;
 
     private Background background;
 
@@ -68,6 +68,14 @@ public class Infested extends JFrame implements KeyListener
                             JOptionPane.showMessageDialog(null, "Goodbye!");
                             System.exit(0);
                         }
+                    }
+                }
+                else if (state == State.PAUSE)
+                {
+                    if(e.getX() <= menuButton.x + menuButton.width && e.getX() >= menuButton.x &&
+                            e.getY() <= menuButton.y + menuButton.height && e.getY() >= menuButton.y)
+                    {
+                        state = State.INTRO;
                     }
                 }
             }
@@ -163,6 +171,11 @@ public class Infested extends JFrame implements KeyListener
                 break;
 
             case PAUSE:
+                g.setColor(Color.YELLOW);
+                g.fillRect(0, 0, getWidth(), getHeight());
+                menuButton = new CustomButton("Main Menu", this);
+                menuButton.setBounds(50, 50, 200, 100);
+                menuButton.draw(g);
                 break;
         }
     }
