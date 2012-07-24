@@ -2,17 +2,14 @@ import java.awt.Graphics;
 import java.io.FileNotFoundException;
 import javax.swing.JPanel;
 
-public class Background extends JPanel
+public class Background
 {
     Player player;
     
     public int distance;
     
     public Background(Player p)
-    {
-        setSize(6000, Infested.HEIGHT);
-        setLayout(null);
-        
+    {    
         player = p;
     }
     
@@ -20,7 +17,7 @@ public class Background extends JPanel
     {
         try
         {
-            g.drawImage(Infested.getImage("backgrounds/suburbs.png"), -distance, 0, this);
+            g.drawImage(Infested.getImage("backgrounds/suburbs.png"), -distance, 0, null);
         }
         catch (FileNotFoundException ex)
         {
@@ -28,6 +25,6 @@ public class Background extends JPanel
             Infested.catchException(ex);
         }
 
-        g.drawImage(player.getImage(), player.getX() - distance, player.getY(), player.getWidth(), player.getHeight(), this);
+        g.drawImage(player.getImage(), player.getX() - distance, player.getY(), player.getWidth(), player.getHeight(), null);
     }
 }

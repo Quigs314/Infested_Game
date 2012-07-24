@@ -57,7 +57,6 @@ public class Infested extends JFrame implements KeyListener
                             e.getY() <= playButton.y + playButton.height && e.getY() >= playButton.y)
                     {
                         state = State.GAME;
-                        add(background);
 
                     }
                     else if(e.getX() <= quitButton.x + quitButton.width && e.getX() >= quitButton.x &&
@@ -277,7 +276,7 @@ public class Infested extends JFrame implements KeyListener
                 isSpaceDown = false;
                 break;
             case VK_W:
-                isWDown = true;
+                isWDown = false;
                 break;
         }
     }

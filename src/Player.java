@@ -5,8 +5,8 @@ public class Player extends Entity
 {
     public static final int RANGE = 50;
 
-    public int speed = 6;
-    public int fallSpeed = 0;
+    public int speed;
+    public float fallSpeed;
 
     private Infested infested;
     
@@ -44,7 +44,7 @@ public class Player extends Entity
     {
         setY(getY() + (int)fallSpeed);
         //TODO: Replace statement with method for determining if player is on a platform
-        if(getY() > Infested.WIDTH / 2 - 50)
+        if(getY() >= Infested.HEIGHT / 2)
         {
             fallSpeed = 0;
             isJumping = false;
