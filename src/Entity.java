@@ -1,15 +1,16 @@
-
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import javax.swing.Timer;
 import javax.swing.ImageIcon;
 
-
 public class Entity implements ActionListener
 {
-    public ArrayList<ImageIcon> forwardImages;
-    public ArrayList<ImageIcon> backwardsImages;
+    public ArrayList<Image> forwardImages;
+    public ArrayList<Image> backwardImages;
 
     private Timer animTimer;
 
@@ -20,15 +21,29 @@ public class Entity implements ActionListener
     public Entity()
     {
         forwardImages = new ArrayList<>();
-        backwardsImages = new ArrayList<>();
+        backwardImages = new ArrayList<>();
         
         animTimer = new  Timer(150, this);
         animTimer.start();
     }
 
-    public int getX()
+    public void loadAnimationFrames(Class classFromWhichThisMethodWasCalled) throws FileNotFoundException
     {
-        return x;
+        Class c = classFromWhichThisMethodWasCalled;
+
+        String animDir /*animation directory*/ = Infested.imagePath + Infested.toLowerCase(c.getName());
+        File animFrames = new File(animDir);
+
+        for(File frame : animFrames.listFiles())
+            if(frame.getName().startsWith("Walking"))
+            {
+                String s = c.getName().toLowerCase() + "/" + frame.getName();
+
+                if(frame.getName().startsWith("WalkingRight"))
+                    forwardImages.add(Infested.getImage(s));
+                else if(frame.getName().startsWith("WalkingLeft"))
+                    backwardImages.add(Infested.getImage(s));
+            }
     }
 
     public void setX(int x)
@@ -36,9 +51,9 @@ public class Entity implements ActionListener
         this.x = x;
     }
 
-    public int getY()
+    public int getX()
     {
-        return y;
+        return x;
     }
 
     public void setY(int y)
@@ -46,9 +61,9 @@ public class Entity implements ActionListener
         this.y = y;
     }
 
-    public int getWidth()
+    public int getY()
     {
-        return width;
+        return y;
     }
 
     public void setWidth(int width)
@@ -56,9 +71,9 @@ public class Entity implements ActionListener
         this.width = width;
     }
 
-    public int getHeight()
+    public int getWidth()
     {
-        return height;
+        return width;
     }
 
     public void setHeight(int height)
@@ -66,14 +81,19 @@ public class Entity implements ActionListener
         this.height = height;
     }
 
-    public int getAnimCycle()
+    public int getHeight()
     {
-        return animCycle;
+        return height;
     }
 
     public void setAnimCycle(int animCycle)
     {
         this.animCycle = animCycle;
+    }
+
+    public int getAnimCycle()
+    {
+        return animCycle;
     }
 
     public boolean isTouching(Entity e)

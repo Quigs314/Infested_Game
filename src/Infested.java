@@ -16,25 +16,21 @@ public class Infested extends JFrame implements KeyListener
 {
     public static final int WIDTH = 600;
     public static final int HEIGHT = 500;
-    
-    public static String imagePath;
-    
-    public State state = State.INTRO;
-    
-    private Image i;
 
-    CustomButton playButton;
-    CustomButton quitButton;
-    
-    Background background;
-    
-    Player player;
-    
-    public boolean isDDown;
-    public boolean isADown;
-    public boolean isWDown;
-    public boolean isSpaceDown;
-    
+    private boolean isDDown, isADown, isSpaceDown, isWDown;
+
+    public static String imagePath;
+
+    public State state = State.INTRO;
+
+    private Image doubleBufferImage;
+
+    private CustomButton playButton, quitButton;
+
+    private Background background;
+
+    private Player player;
+
     public Infested()
     {
         super("Infested");
@@ -61,7 +57,6 @@ public class Infested extends JFrame implements KeyListener
                             e.getY() <= playButton.y + playButton.height && e.getY() >= playButton.y)
                     {
                         state = State.GAME;
-                        add(background);
 
                     }
                     else if(e.getX() <= quitButton.x + quitButton.width && e.getX() >= quitButton.x &&
@@ -84,32 +79,46 @@ public class Infested extends JFrame implements KeyListener
             switch(state)
             {
                 case INTRO:
-                    
                     break;
+
                 case GAME:
                     if(isDDown)
                     {
-                        player.setX(player.getX() + player.speed);
-                        background.distance += player.speed;
+                        if(player.getX() < player.getDefaultX() + Player.RANGE + background.distance)
+                            player.setX(player.getX() + player.speed);
+                        else
+                        {
+                            player.setX(player.getX() + player.speed);
+                            background.distance += player.speed;
+                        }
+
                         player.isForwards = true;
                         player.isWalking = true;
                     }
-                    else if(isADown && background.distance > 0)
+                    else if(isADown)
                     {
-                        player.setX(player.getX() - player.speed);
-                        background.distance -= player.speed;
+                        if(player.getX() > player.getDefaultX() - Player.RANGE + background.distance)
+                            player.setX(player.getX() - player.speed);
+                        else
+                        {
+                            player.setX(player.getX() - player.speed);
+                            background.distance -= player.speed;
+                        }
+
                         player.isForwards = false;
                         player.isWalking = true;
                     }
                     else
                         player.isWalking = false;
-                    
+
                     if(isWDown && !player.isJumping)
                         player.fallSpeed = -10;
                     
                     player.fall();
+
                     break;
             }
+            
 
             try
             {
@@ -124,10 +133,10 @@ public class Infested extends JFrame implements KeyListener
     
     public void paint(Graphics g)
     {
-        i = createImage(getWidth(), getHeight());
-        render(i.getGraphics());
+        doubleBufferImage = createImage(getWidth(), getHeight());
+        render(doubleBufferImage.getGraphics());
         repaint();
-        g.drawImage(i, 0, 0, this);
+        g.drawImage(doubleBufferImage, 0, 0, this);
     }
     
     public void render(Graphics g)
@@ -139,7 +148,8 @@ public class Infested extends JFrame implements KeyListener
                 {
                     g.setColor(Color.GREEN);
                     g.fillRect(0, 0, getWidth(), getHeight());
-                    g.drawImage(getImage("Logo"), 100, 50, 400, 200, this);
+                    int width = 400, height = 200;
+                    g.drawImage(getImage("Logo.png"), WIDTH / 2 - width / 2, 50, width, height, this);
                     playButton = new CustomButton("Play Game", this);
                     playButton.setBounds(50, 250, 200, 100);
                     playButton.draw(g);
@@ -154,14 +164,16 @@ public class Infested extends JFrame implements KeyListener
                 }
                 break;
             case GAME:
-                background.render(g);
+                background.render(g, this);
+                break;
+            case PAUSE:
                 break;
         }
     }
     
-    public static Image getImage(String i) throws FileNotFoundException
+    public static Image getImage(String fileWithExtension) throws FileNotFoundException
     {
-        String toReturn = imagePath + i + ".png";
+        String toReturn = imagePath + fileWithExtension;
 
         if(!new File(toReturn).exists())
             throw new FileNotFoundException(toReturn + " does not exist");
@@ -169,8 +181,14 @@ public class Infested extends JFrame implements KeyListener
         return new ImageIcon(toReturn).getImage();
     }
 
-    public static void catchException(Exception e)
+    //Used the make only the first letter lowercase
+    public static String toLowerCase(String s)
     {
+        return s.replace(s.charAt(0), Character.toLowerCase(s.charAt(0)));
+    }
+
+    public static void catchException(Exception e)
+    {   
         StackTraceElement[] stackTrace = e.getStackTrace();
 
         JOptionPane.showMessageDialog(null,
@@ -181,9 +199,39 @@ public class Infested extends JFrame implements KeyListener
                 "Error", JOptionPane.ERROR_MESSAGE);
 
         System.out.println("INFESTED: ** An Exception occured. The stack trace is below. **");
-        e.printStackTrace(System.err);
+        e.printStackTrace();
 
         System.exit(1);
+    }
+
+    public boolean isDDown()
+    {
+        return isDDown;
+    }
+
+    public void setDDown(boolean DDown)
+    {
+        isDDown = DDown;
+    }
+
+    public boolean isADown()
+    {
+        return isADown;
+    }
+
+    public void setADown(boolean ADown)
+    {
+        isADown = ADown;
+    }
+
+    public boolean isSpaceDown()
+    {
+        return isSpaceDown;
+    }
+
+    public void setSpaceDown(boolean spaceDown)
+    {
+        isSpaceDown = spaceDown;
     }
 
     @Override
@@ -201,11 +249,14 @@ public class Infested extends JFrame implements KeyListener
             case VK_A:
                 isADown = true;
                 break;
-            case VK_W:
-                isWDown = true;
-                break;
             case VK_SPACE:
                 isSpaceDown = true;
+                break;
+            case VK_ESCAPE:
+                state = State.PAUSE;
+                break;
+            case VK_W:
+                isWDown = true;
                 break;
         }
     }
@@ -221,11 +272,11 @@ public class Infested extends JFrame implements KeyListener
             case VK_A:
                 isADown = false;
                 break;
-            case VK_W:
-                isWDown = false;
-                break;
             case VK_SPACE:
                 isSpaceDown = false;
+                break;
+            case VK_W:
+                isWDown = false;
                 break;
         }
     }
