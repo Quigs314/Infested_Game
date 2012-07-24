@@ -56,11 +56,14 @@ public class CustomButton
     
     public void draw(Graphics g)
     {
-        try {
+        try
+        {
             g.drawImage(infested.getImage("Button1.png"),x, y, width, height, null);
             g.setColor(Color.WHITE);
             g.drawString(label, x + (width / 2 - 50), y + (height / 2 + 5));
-        } catch (FileNotFoundException ex) {
+        }
+        catch (FileNotFoundException ex)
+        {
             infested.catchException(ex);
         }
     }

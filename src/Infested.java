@@ -17,7 +17,7 @@ public class Infested extends JFrame implements KeyListener
     public static final int WIDTH = 600;
     public static final int HEIGHT = 500;
 
-    private boolean isDDown, isADown, isSpaceDown, isWDown;
+    private boolean isDDown, isADown, isSpaceDown, isWDown, paused;
 
     public static String imagePath;
 
@@ -84,26 +84,20 @@ public class Infested extends JFrame implements KeyListener
                 case GAME:
                     if(isDDown)
                     {
-                        if(player.getX() < player.getDefaultX() + Player.RANGE + background.distance)
+                        if(player.getX() < player.getDefaultX() + Player.RANGE)
                             player.setX(player.getX() + player.speed);
                         else
-                        {
-                            player.setX(player.getX() + player.speed);
-                            background.distance += player.speed;
-                        }
+                            background.setX(background.getX() - player.speed);
 
                         player.isForwards = true;
                         player.isWalking = true;
                     }
                     else if(isADown)
                     {
-                        if(player.getX() > player.getDefaultX() - Player.RANGE + background.distance)
+                        if(player.getX() > player.getDefaultX() - Player.RANGE)
                             player.setX(player.getX() - player.speed);
                         else
-                        {
-                            player.setX(player.getX() - player.speed);
-                            background.distance -= player.speed;
-                        }
+                            background.setX(background.getX() + player.speed);
 
                         player.isForwards = false;
                         player.isWalking = true;
@@ -163,9 +157,11 @@ public class Infested extends JFrame implements KeyListener
                     catchException(e);
                 }
                 break;
+
             case GAME:
                 background.render(g, this);
                 break;
+
             case PAUSE:
                 break;
         }
@@ -253,7 +249,10 @@ public class Infested extends JFrame implements KeyListener
                 isSpaceDown = true;
                 break;
             case VK_ESCAPE:
-                state = State.PAUSE;
+                paused = !paused;
+                if(paused)
+                    state = State.PAUSE;
+                else state = State.GAME;
                 break;
             case VK_W:
                 isWDown = true;

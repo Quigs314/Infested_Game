@@ -51,7 +51,7 @@ public class Player extends Entity
         }
         else
         {
-            fallSpeed += 0.5;
+            fallSpeed += 0.75;
             isJumping = true;
         }
     }
