@@ -86,7 +86,7 @@ public class Infested extends JFrame implements KeyListener
                     {
                         if(player.getX() < player.getDefaultX() + Player.RANGE)
                             player.setX(player.getX() + player.speed);
-                        else
+                        else if(background.getX() > -(6000 - WIDTH))
                             background.setX(background.getX() - player.speed);
 
                         player.isForwards = true;
@@ -96,7 +96,7 @@ public class Infested extends JFrame implements KeyListener
                     {
                         if(player.getX() > player.getDefaultX() - Player.RANGE)
                             player.setX(player.getX() - player.speed);
-                        else
+                        else if(background.getX() < 0)
                             background.setX(background.getX() + player.speed);
 
                         player.isForwards = false;
