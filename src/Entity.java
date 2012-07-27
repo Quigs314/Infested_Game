@@ -31,13 +31,14 @@ public class Entity implements ActionListener
     {
         Class c = classFromWhichThisMethodWasCalled;
 
-        String animDir /*animation directory*/ = Infested.imagePath + Infested.toLowerCase(c.getName());
+        String animDir /*animation directory*/ = PathConstants.ANIMATIONS + Infested.toLowerCase(c.getName());
         File animFrames = new File(animDir);
 
         for(File frame : animFrames.listFiles())
             if(frame.getName().startsWith("Walking"))
             {
-                String s = c.getName().toLowerCase() + "/" + frame.getName();
+                String s = "animations/" + c.getName().toLowerCase() + "/" + frame.getName();
+                System.out.println(s);
 
                 if(frame.getName().startsWith("WalkingRight"))
                     forwardImages.add(Infested.getImage(s));

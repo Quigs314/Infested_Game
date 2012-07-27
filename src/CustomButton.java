@@ -58,7 +58,7 @@ public class CustomButton
     {
         try
         {
-            g.drawImage(infested.getImage("Button1.png"),x, y, width, height, null);
+            g.drawImage(Infested.getImage("Button1.png"),x, y, width, height, null);
             g.setColor(Color.WHITE);
             g.drawString(label, x + (width / 2 - 50), y + (height / 2 + 5));
         }

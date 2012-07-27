@@ -16,12 +16,11 @@ public class Background
     {
         try
         {
-            g.drawImage(Infested.getImage("backgrounds/suburbs.png"), x, 0, i);
+            g.drawImage(Infested.getImage(DirConstants.BACKGROUNDS + "suburbs.png"), x, 0, i);
         }
-        catch (FileNotFoundException ex)
+        catch (FileNotFoundException e)
         {
-            i.setVisible(false);
-            Infested.catchException(ex);
+            i.catchException(e);
         }
 
         g.drawImage(player.getImage(), player.getX(), player.getY(), player.getWidth(), player.getHeight(), i);

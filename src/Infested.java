@@ -14,12 +14,11 @@ import javax.swing.JOptionPane;
 
 public class Infested extends JFrame implements KeyListener
 {
+    //TODO: Make it wider
     public static final int WIDTH = 600;
     public static final int HEIGHT = 500;
 
     private boolean isDDown, isADown, isSpaceDown, isWDown, paused;
-
-    public static String imagePath;
 
     public State state = State.INTRO;
 
@@ -34,8 +33,6 @@ public class Infested extends JFrame implements KeyListener
     public Infested()
     {
         super("Infested");
-        
-        imagePath = "res/images/";
         
         player = new Player(this);
         background = new Background(player);
@@ -182,7 +179,7 @@ public class Infested extends JFrame implements KeyListener
     
     public static Image getImage(String fileWithExtension) throws FileNotFoundException
     {
-        String toReturn = imagePath + fileWithExtension;
+        String toReturn = PathConstants.IMAGES + fileWithExtension;
 
         if(!new File(toReturn).exists())
             throw new FileNotFoundException(toReturn + " does not exist");
@@ -196,8 +193,10 @@ public class Infested extends JFrame implements KeyListener
         return s.replace(s.charAt(0), Character.toLowerCase(s.charAt(0)));
     }
 
-    public static void catchException(Exception e)
-    {   
+    public void catchException(Exception e)
+    {
+        setVisible(false);
+
         StackTraceElement[] stackTrace = e.getStackTrace();
 
         JOptionPane.showMessageDialog(null,
