@@ -5,4 +5,4 @@
 5. Enemy class
 6. Ant class
 7. Effective way of adding enemies to the game
-8. Text feild to inform player of story, how to play, etc
+8. Text field to inform player of story, how to play, etc
