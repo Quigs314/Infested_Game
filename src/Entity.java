@@ -38,7 +38,6 @@ public class Entity implements ActionListener
             if(frame.getName().startsWith("Walking"))
             {
                 String s = "animations/" + c.getName().toLowerCase() + "/" + frame.getName();
-                System.out.println(s);
 
                 if(frame.getName().startsWith("WalkingRight"))
                     forwardImages.add(Infested.getImage(s));

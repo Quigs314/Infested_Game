@@ -14,6 +14,8 @@ public class Player extends Entity
     boolean isForwards;
     boolean isJumping;
 
+    Weapon currentWeapon;
+    
     public Player(Infested i)
     {
         infested = i;
