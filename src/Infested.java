@@ -8,9 +8,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 
 public class Infested extends JFrame implements KeyListener
 {
@@ -29,6 +31,9 @@ public class Infested extends JFrame implements KeyListener
     private Background background;
 
     private Player player;
+    
+    private String infoText;
+    private float textTime;
 
     public Infested()
     {
@@ -37,12 +42,16 @@ public class Infested extends JFrame implements KeyListener
         player = new Player(this);
         background = new Background(player);
         
+        infoText = "Welcome to Infested!";
+        textTime = 3;
+        
         setSize(WIDTH, HEIGHT);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setFocusable(true);
         requestFocus();
         addKeyListener(this);
+        
         addMouseListener(new MouseAdapter()
         {
             @Override
@@ -115,6 +124,8 @@ public class Infested extends JFrame implements KeyListener
                     
                     player.fall();
 
+                    textTime -= 0.02;
+                    
                     break;
             }
             
@@ -165,6 +176,13 @@ public class Infested extends JFrame implements KeyListener
 
             case GAME:
                 background.render(g, this);
+                if(textTime > 0)
+                {
+                    g.setColor(Color.WHITE);
+                    g.fillRect(0, HEIGHT - 80, WIDTH, 80);
+                    g.setColor(Color.BLACK);
+                    g.drawString(infoText, 10, HEIGHT - 60);
+                }
                 break;
 
             case PAUSE:
@@ -212,6 +230,26 @@ public class Infested extends JFrame implements KeyListener
         System.exit(1);
     }
 
+    public void setInfoText(String text)
+    {
+        infoText = text;
+    }
+    
+    public String getInfoText()
+    {
+        return infoText;
+    }
+    
+    public void setTextTime(float time)
+    {
+        textTime = time;
+    }
+    
+    public float getTextTime()
+    {
+        return textTime;
+    }
+    
     public boolean isDDown()
     {
         return isDDown;
